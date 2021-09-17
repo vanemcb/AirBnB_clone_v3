@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+""" app module  """
 
 from flask import Flask, Blueprint
 from models import storage
@@ -11,7 +12,7 @@ app.register_blueprint(app_views)
 
 @app.teardown_appcontext
 def teardown(exception):
-    """method to handle the teardown of the application"""
+    """Method to handle the teardown of the application"""
     storage.close()
 
 
