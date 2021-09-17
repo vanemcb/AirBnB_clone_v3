@@ -73,7 +73,7 @@ class TestFileStorage(unittest.TestCase):
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_all_returns_dict(self):
         """Test that all returns a dictionaty"""
-        self.assertIs(type(models.storage.all()), dict)
+        self.assertIs(type(models.storage.all()), str)
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_all_no_class(self):
@@ -86,3 +86,27 @@ class TestFileStorage(unittest.TestCase):
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_save(self):
         """Test that save properly saves objects to file.json"""
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing file storage")
+    def test_get(self):
+        """Test that returns the object based on the class and its ID,
+        or None if not found"""
+        first_state = list(models.storage.all().values())[0]
+        get_state = models.storage.all().get(State, first_state.id)
+        self.assertEqual(first_state, get_state)
+
+        first_city = list(models.storage.all().all(City).values())[0]
+        get_city = models.storage.all().get(City, first_city.id)
+        self.assertEqual(first_city, get_city)
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing file storage")
+    def test_count(self):
+        """Test that returns the number of objects in storage matching the
+        given class. If no class is passed, returns the count of all objects
+        in storage"""
+        self.assertEqual(models.storage.all().count(),
+                         len(models.storage.all()))
+        self.assertEqual(models.storage.all().count(
+            State), len(models.storage.all().all(State)))
+        self.assertEqual(models.storage.all().count(
+            City), len(models.storage.all().all(City)))
