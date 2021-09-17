@@ -5,6 +5,8 @@ Contains the TestFileStorageDocs classes
 
 from datetime import datetime
 import inspect
+
+from sqlalchemy.sql.functions import count
 import models
 from models.engine import file_storage
 from models.amenity import Amenity
@@ -113,3 +115,26 @@ class TestFileStorage(unittest.TestCase):
         with open("file.json", "r") as f:
             js = f.read()
         self.assertEqual(json.loads(string), json.loads(js))
+
+    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    def test_get(self):
+        """Test that returns the object based on the class and its ID,
+        or None if not found"""
+        storage = FileStorage()
+        first_state = list(storage.all(State).values())[0]
+        get_state = storage.get(State, first_state.id)
+        self.assertEqual(first_state, get_state)
+
+        first_city = list(storage.all(City).values())[0]
+        get_city = storage.get(City, first_city.id)
+        self.assertEqual(first_city, get_city)
+
+    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    def test_count(self):
+        """Test that returns the number of objects in storage matching the
+        given class. If no class is passed, returns the count of all objects
+        in storage"""
+        storage = FileStorage()
+        self.assertEqual(storage.count(), len(storage.all()))
+        self.assertEqual(storage.count(State), len(storage.all(State)))
+        self.assertEqual(storage.count(City), len(storage.all(City)))
