@@ -27,7 +27,7 @@ def get_city(city_id):
     city = storage.get('City', city_id)
     if city is None:
         abort(404)
-    return jsonify(city.to_dict())
+    return city.to_dict()
 
 
 @app_views.route(
@@ -91,4 +91,4 @@ def put_city(city_id):
         for key, value in request.get_json().items():
             setattr(city, key, value)
         storage.save()
-        return jsonify(city.to_dict()), 200
+        return city.to_dict(), 200
