@@ -24,7 +24,7 @@ def get_user(user_id):
     user = storage.get('User', user_id)
     if user is None:
         abort(404)
-    return user.to_dict()
+    return jsonify(user.to_dict())
 
 
 @ app_views.route(
@@ -52,7 +52,7 @@ def post_user():
         new_user = User(**request.get_json())
         storage.new(new_user)
         storage.save()
-    return new_user.to_dict(), 201
+    return jsonify(new_user.to_dict()), 201
 
 
 @ app_views.route(
@@ -86,4 +86,4 @@ def put_user(user_id):
         for key, value in request.get_json().items():
             setattr(user, key, value)
         storage.save()
-        return user.to_dict(), 200
+        return jsonify(user.to_dict(), 200)
