@@ -8,7 +8,7 @@ from models.state import State
 
 @app_views.route('/states',  strict_slashes=False, methods=['GET'])
 def get_states():
-    """ """
+    """Retrieves the list of all State objects"""
     dict_state = storage.all(State)
     states_list = []
     for value in dict_state.values():
@@ -18,7 +18,7 @@ def get_states():
 
 @app_views.route('/states/<state_id>', strict_slashes=False, methods=['GET'])
 def get_state(state_id):
-    """ """
+    """Retrieves a State object """
     dict_state = storage.all(State)
     for key, value in dict_state.items():
         if "State.{}".format(state_id) == key:
@@ -26,9 +26,10 @@ def get_state(state_id):
     abort(404)
 
 
-@app_views.route('/states/<state_id>', strict_slashes=False, methods=['DELETE'])
+@app_views.route(
+    '/states/<state_id>', strict_slashes=False, methods=['DELETE'])
 def delete_state(state_id):
-    """ """
+    """Deletes a State object"""
     dict_state = storage.all(State)
     for key, value in dict_state.items():
         if "State.{}".format(state_id) == key:
@@ -39,13 +40,13 @@ def delete_state(state_id):
 
 @app_views.route('/states', strict_slashes=False, methods=['POST'])
 def post_state():
-    """ """
-    if not request.get_json:
+    """Creates a State """
+    if not request.get_json():
         abort(Response("Not a JSON", 400))
-    elif not "name" in request.get_json:
+    elif "name" not in request.get_json():
         abort(Response("Missing name", 400))
     else:
-        new_state = State(**request.get_json)
+        new_state = State(**request.get_json())
         storage.new(new_state)
         storage.save()
     return new_state.to_dict(), 201
@@ -53,12 +54,27 @@ def post_state():
 
 @app_views.route('/states/<state_id>', strict_slashes=False, methods=['PUT'])
 def put_state(state_id):
-    """ """
-    if not request.get_json:
+    """Updates a State object"""
+    if not request.get_json():
         abort(Response("Not a JSON", 400))
     else:
+        try:
+            request.get_json().pop("id")
+        except:
+            pass
+        try:
+            request.get_json().pop("created_at")
+        except:
+            pass
+        try:
+            request.get_json().pop("updated_at")
+        except:
+            pass
+
         dict_state = storage.all(State)
         for key, value in dict_state.items():
             if "State.{}".format(state_id) == key:
-                return jsonify(value.to_dict())
+                value.__dict__.update(request.get_json())
+                storage.save()
+                return value.to_dict(), 200
         abort(404)
