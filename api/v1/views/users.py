@@ -64,19 +64,19 @@ def put_user(user_id):
     else:
         try:
             request.get_json().pop("id")
-        except(exception):
+        except:
             pass
         try:
             request.get_json().pop("created_at")
-        except(exception):
+        except:
             pass
         try:
             request.get_json().pop("updated_at")
-        except(exception):
+        except:
             pass
         try:
             request.get_json().pop("email")
-        except(exception):
+        except:
             pass
 
         user = storage.get('User', user_id)
