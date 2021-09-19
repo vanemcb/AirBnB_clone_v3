@@ -61,7 +61,7 @@ def post_city(state_id):
     return new_city.to_dict(), 201
 
 
-@ app_views.route('cities/<city_id>', strict_slashes=False, methods=['PUT'])
+@ app_views.route('/cities/<city_id>', strict_slashes=False, methods=['PUT'])
 def put_city(city_id):
     """Updates a City object"""
     if not request.get_json():
