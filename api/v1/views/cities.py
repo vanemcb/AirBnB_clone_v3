@@ -16,12 +16,12 @@ def get_cities(state_id):
     for value in dict_city.values():
         if value.state_id == state_id:
             cities_list.append(value.to_dict())
-    if len(cities_list) == 0:
+    if cities_list == []:
         abort(404)
     return jsonify(cities_list)
 
 
-@ app_views.route('/cities/<city_id>', strict_slashes=False, methods=['GET'])
+@app_views.route('/cities/<city_id>', strict_slashes=False, methods=['GET'])
 def get_city(city_id):
     """Retrieves a City object """
     city = storage.get('City', city_id)
