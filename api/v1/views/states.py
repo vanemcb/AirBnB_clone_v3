@@ -77,6 +77,6 @@ def put_state(state_id):
         for key, value in dict_state.items():
             if "State.{}".format(state_id) == key:
                 value.__dict__.update(request.get_json())
-                storage.save()
+                value.save()  # this sh!t doesn't work
                 return value.to_dict(), 200
         abort(404)
