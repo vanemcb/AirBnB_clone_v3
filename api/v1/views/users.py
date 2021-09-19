@@ -86,4 +86,4 @@ def put_user(user_id):
         for key, value in request.get_json().items():
             setattr(user, key, value)
         storage.save()
-        return jsonify(user.to_dict(), 200)
+        return jsonify(user.to_dict()), 200
