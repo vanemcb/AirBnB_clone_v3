@@ -5,7 +5,6 @@ from flask import Flask, jsonify, abort, request, Response
 from api.v1.views import app_views
 from models import storage
 from models.city import City
-from models.state import State
 
 
 @app_views.route(
