@@ -39,7 +39,7 @@ def delete_city(city_id):
         abort(404)
     storage.delete(city)
     storage.save()
-    return {}
+    return {}, 200
 
 
 @app_views.route(
