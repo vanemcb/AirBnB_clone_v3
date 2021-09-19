@@ -73,10 +73,9 @@ def put_state(state_id):
         except:
             pass
 
-        dict_state = storage.all(State)
-        for key, value in dict_state.items():
-            if "State.{}".format(state_id) == key:
-                value.__dict__.update(request.get_json())
-                value.save()  # this sh!t doesn't work
-                return value.to_dict(), 200
-        abort(404)
+        state = storage.get('State', state_id)
+        for key, value in request.get_json().items():
+            setattr(state, key, value)
+        storage.save()
+        return jsonify(state.to_dict()), 200
+    abort(404)
