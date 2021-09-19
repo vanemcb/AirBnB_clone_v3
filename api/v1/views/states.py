@@ -34,7 +34,8 @@ def delete_state(state_id):
     dict_state = storage.all(State)
     for key, value in dict_state.items():
         if "State.{}".format(state_id) == key:
-            storage.delete(value)  # doesn't work
+            storage.delete(value)
+            storage.save()
             return {}
     abort(404)
 
