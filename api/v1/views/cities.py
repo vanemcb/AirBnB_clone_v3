@@ -39,7 +39,7 @@ def delete_city(city_id):
         abort(404)
     storage.delete(city)
     storage.save()
-    return {}, 200
+    return {}
 
 
 @app_views.route(
@@ -91,4 +91,4 @@ def put_city(city_id):
         for key, value in request.get_json().items():
             setattr(city, key, value)
         storage.save()
-        return city.to_dict(), 200
+        return jsonify(city.to_dict()), 200
