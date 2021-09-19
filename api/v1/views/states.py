@@ -74,8 +74,10 @@ def put_state(state_id):
             pass
 
         state = storage.get('State', state_id)
+        if state is None:
+            abort(404)
+
         for key, value in request.get_json().items():
             setattr(state, key, value)
         storage.save()
         return jsonify(state.to_dict()), 200
-    abort(404)
