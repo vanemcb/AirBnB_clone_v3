@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Module for the places view"""
+"""Module for the Reviews view"""
 
 from flask import Flask, jsonify, abort, request, Response
 from api.v1.views import app_views
