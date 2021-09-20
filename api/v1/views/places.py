@@ -50,13 +50,15 @@ def post_place(city_id):
         abort(Response("Not a JSON", 400))
     elif "user_id" not in request.get_json():
         abort(Response("Missing user_id", 400))
+    elif storage.get('User', request.get_json().get('user_id')) is None:
+        abort(404)
     elif "name" not in request.get_json():
         abort(Response("Missing name", 400))
     elif city is None:
         abort(404)
     else:
         new_place = Place(**request.get_json())
-        setattr(new_place, 'state_id', city_id)
+        setattr(new_place, 'city_id', city_id)
         storage.new(new_place)
         storage.save()
     return new_place.to_dict(), 201
