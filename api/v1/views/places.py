@@ -9,15 +9,14 @@ from models.place import Place
 
 @app_views.route(
     '/cities/<city_id>/places',  strict_slashes=False, methods=['GET'])
-def get_places(state_id):
+def get_places(city_id):
     """Retrieves the list of all Place objects of a City"""
-    dict_place = storage.all(Place)
-    places_list = []
-    for value in dict_place.values():
-        if value.city_id == city_id:
-            places_list.append(value.to_dict())
-    if places_list == []:
+    city = storage.get('City', city_id)
+    if city is None:
         abort(404)
+    places_list = []
+    for value in city.places:
+        places_list.append(value.to_dict())
     return jsonify(places_list)
 
 
@@ -57,7 +56,7 @@ def post_place(city_id):
         abort(404)
     else:
         new_place = Place(**request.get_json())
-        setattr(new_city, 'state_id', state_id)
+        setattr(new_place, 'state_id', city_id)
         storage.new(new_place)
         storage.save()
     return new_place.to_dict(), 201
