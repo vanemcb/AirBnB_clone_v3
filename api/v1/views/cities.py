@@ -11,13 +11,12 @@ from models.city import City
     '/states/<state_id>/cities',  strict_slashes=False, methods=['GET'])
 def get_cities(state_id):
     """Retrieves the list of all City objects of a State"""
-    dict_city = storage.all(City)
-    cities_list = []
-    for value in dict_city.values():
-        if value.state_id == state_id:
-            cities_list.append(value.to_dict())
-    if cities_list == []:
+    state = storage.get('State', state_id)
+    if state is None:
         abort(404)
+    cities_list = []
+    for value in state.cities:
+        cities_list.append(value.to_dict())
     return jsonify(cities_list)
 
 
