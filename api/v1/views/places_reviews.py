@@ -3,7 +3,6 @@
 
 from flask import Flask, jsonify, abort, request, Response
 from api.v1.views import app_views
-from holberton_school.AirBnB_clone_v3.models import review
 from models import storage
 from models.review import Review
 
